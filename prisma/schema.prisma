@@ -9,3 +9,86 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id              Int            @id @default(autoincrement())
+  firstName       String
+  lastName        String
+  imgUrl          String
+  email           String         @unique
+  password        String
+  phoneNumber     String
+  description     String?        @default("")
+  role            userRole
+  UserLocation    UserLocation[]
+  PetUser         Pet[]          @relation(name: "PetUser")
+  PetOrganization Pet[]          @relation(name: "PetOrganization")
+}
+
+model Location {
+  id           Int            @id @default(autoincrement())
+  cep          String
+  state        String
+  streetName   String
+  complement   String?        @default("")
+  UserLocation UserLocation[]
+}
+
+model UserLocation {
+  id         Int      @id @default(autoincrement())
+  user       User     @relation(fields: [userId], references: [id])
+  userId     Int
+  location   Location @relation(fields: [locationId], references: [id])
+  locationId Int
+}
+
+model Pet {
+  id               Int         @id @default(autoincrement())
+  name             String
+  type             petType
+  description      String?     @default("")
+  breed            String
+  age              Int
+  color            String
+  sex              petSex
+  spayedOrNeutered Boolean
+  user             User        @relation(fields: [userId], references: [id], name: "PetUser")
+  userId           Int
+  organization     User        @relation(fields: [organizationId], references: [id], name: "PetOrganization")
+  organizationId   Int
+  status           petStatus
+  PetImages        PetImages[]
+}
+
+model PetImages {
+  id       Int    @id @default(autoincrement())
+  pet      Pet    @relation(fields: [petId], references: [id])
+  petId    Int
+  imageUrl String @unique
+}
+
+enum userRole {
+  default
+  temporaryCare
+  organization
+}
+
+enum petType {
+  cat
+  dog
+  rabbit
+  rodent
+  bird
+  outro
+}
+
+enum petSex {
+  male
+  female
+}
+
+enum petStatus {
+  waiting
+  temporaryCare
+  adopted
+}
