@@ -9,10 +9,10 @@ const userServices = {
     const { password, email } = userData;
 
     const user = await userRepository.findByEmail(email);
-    if (!user) {
+    if (user) {
       throw {
-        name: "notFound",
-        message: "⚠ No user found with given email..."
+        name: "conflict",
+        message: "⚠ User already registered..."
       };
     }
 
@@ -30,8 +30,6 @@ const userServices = {
     };
 
     const createdUser = await userRepository.create(createUserData);
-
-    console.log("created user: ", createdUser);
 
     return createdUser.id;
   }
