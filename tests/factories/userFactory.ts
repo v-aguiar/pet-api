@@ -8,11 +8,12 @@ import { CreateUserData } from "../../src/services/userServices.js";
 
 const userFactory = {
   generateUserBody: () => {
-    const password = userUtils.hashData(faker.internet.password());
+    const password = faker.internet.password();
+    const hashedPassword = userUtils.hashData(password);
 
     const createUserBody: CreateUserBody = {
-      password,
-      confirmPassword: password,
+      password: hashedPassword,
+      confirmPassword: hashedPassword,
       email: faker.internet.email(),
       description: faker.lorem.paragraph(),
       firstName: faker.name.firstName(),
@@ -26,10 +27,11 @@ const userFactory = {
   },
 
   create: async () => {
-    const password = userUtils.hashData(faker.internet.password());
+    const password = faker.internet.password();
+    const hashedPassword = userUtils.hashData(password);
 
     const createUserData: CreateUserData = {
-      password,
+      password: hashedPassword,
       email: faker.internet.email(),
       description: faker.lorem.paragraph(),
       firstName: faker.name.firstName(),
@@ -39,9 +41,12 @@ const userFactory = {
       role: faker.helpers.arrayElement(["default", "temporaryCare", "organization"])
     };
 
-    return await prisma.user.create({
-      data: createUserData
-    });
+    const createdUser = await prisma.user.create({ data: createUserData });
+
+    return {
+      ...createdUser,
+      signInPassword: password
+    };
   }
 };
 

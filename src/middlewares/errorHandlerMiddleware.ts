@@ -19,7 +19,7 @@ export function errorHandlerMiddleware(error: Error, req: Request, res: Response
     return;
   }
 
-  if (error.name === "alreadyExists") {
+  if (error.name === "conflict") {
     console.error(error.message);
     res.status(409).send(error.message);
     return;

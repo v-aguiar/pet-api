@@ -3,13 +3,17 @@ import { CreateUserData } from "../services/userServices.js";
 
 const userRepository = {
   create: async (createdUserData: CreateUserData) => {
-    return await prisma.user.create({
+    return prisma.user.create({
       data: createdUserData
     });
   },
 
   findByEmail: async (email: string) => {
-    return await prisma.user.findUnique({ where: { email } });
+    return prisma.user.findUnique({ where: { email } });
+  },
+
+  findById: async (id: number) => {
+    return prisma.user.findUnique({ where: { id } });
   }
 };
 
