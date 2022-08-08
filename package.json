@@ -4,10 +4,14 @@
   "description": "Api for Pet, a pet adoption network",
   "main": "index.js",
   "scripts": {
-    "test": "test",
     "build": "tsc",
     "start": "node ./dist/index.js",
-    "dev": "nodemon ./src/index.ts"
+    "dev": "nodemon ./src/index.ts",
+    "dev:test": "dotenv -e .env.test nodemon src/server.ts",
+    "prisma-prod": "prisma migrate deploy",
+    "prisma-test": "dotenv -e .env.test prisma migrate reset --skip-seed",
+    "test": "npm run prisma-test && NODE_OPTION=--experimental-vm-modules dotenv -e .env.test jest -- -i",
+    "test:unit": "NODE_OPTION=--experimental-vm-modules dotenv -e .env.test jest -- -i --coverage --testPathPattern=./tests/unit"
   },
   "repository": {
     "type": "git",
@@ -20,7 +24,7 @@
     "postgresql",
     "prisma",
     "jest",
-    "cypress"
+    "supertest"
   ],
   "author": "Victor Aguiar Ribeiro",
   "license": "MIT",
@@ -34,12 +38,15 @@
     "cors": "^2.8.5",
     "cryptr": "^6.0.3",
     "dotenv": "^16.0.1",
+    "dotenv-cli": "^6.0.0",
     "express": "^4.18.1",
     "express-async-errors": "^3.1.1",
     "joi": "^17.6.0"
   },
   "devDependencies": {
+    "@faker-js/faker": "^7.3.0",
     "@prisma/client": "^4.1.1",
+    "@types/bcrypt": "^5.0.0",
     "@types/cors": "^2.8.12",
     "@types/express": "^4.17.13",
     "@types/jest": "^28.1.6",
