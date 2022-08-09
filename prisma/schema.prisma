@@ -26,20 +26,24 @@ model User {
 }
 
 model Location {
-  id           Int            @id @default(autoincrement())
-  cep          String
-  state        String
-  streetName   String
-  complement   String?        @default("")
-  UserLocation UserLocation[]
+  id             Int            @id @default(autoincrement())
+  cep            String
+  city           String
+  state          String
+  streetName     String
+  district       String?
+  complement     String?        @default("")
+  isMainLocation Boolean?       @default(false)
+  UserLocation   UserLocation[]
 }
 
 model UserLocation {
-  id         Int      @id @default(autoincrement())
-  user       User     @relation(fields: [userId], references: [id])
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     Int
   location   Location @relation(fields: [locationId], references: [id])
   locationId Int
+
+  @@id([userId, locationId])
 }
 
 model Pet {

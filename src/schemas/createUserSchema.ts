@@ -1,8 +1,8 @@
-﻿import { User } from "@prisma/client";
+﻿import { Location, User } from "@prisma/client";
 
 import Joi from "joi";
 
-export type CreateUserBody = Omit<User, "id"> & { confirmPassword: String };
+export type CreateUserBody = Omit<User, "id"> & { confirmPassword: String } & Omit<Location, "id">;
 
 const createUserSchema = Joi.object<CreateUserBody>({
   email: Joi.string().email().required().messages({
@@ -49,6 +49,40 @@ const createUserSchema = Joi.object<CreateUserBody>({
     "string.base": "⚠ Role must be of type string...",
     "string.valid": "⚠ Role must be one of the following: default, temporaryCare, organization...",
     "string.required": "⚠ Role is required..."
+  }),
+  cep: Joi.string()
+    .length(8)
+    .regex(/^[0-9]*$/)
+    .required()
+    .messages({
+      "string.base": "⚠ Cep must be of type string...",
+      "string.length": "⚠ Cep must be at least 8 characters long...",
+      "string.regex": "⚠ Cep must be numeric...",
+      "string.required": "⚠ Cep is required..."
+    }),
+  complement: Joi.string().messages({
+    "string.base": "⚠ Complement must be of type string..."
+  }),
+  isMainLocation: Joi.boolean().messages({
+    "boolean.base": "⚠ 'isMainLocation' must be of type boolean..."
+  }),
+  city: Joi.string().required().messages({
+    "string.empty": "⚠ City cannot be empty...",
+    "string.required": "⚠ City is required...",
+    "string.base": "⚠ City must be of type string..."
+  }),
+  district: Joi.string().messages({
+    "string.base": "⚠ District must be of type string..."
+  }),
+  state: Joi.string().required().messages({
+    "string.empty": "⚠ State cannot be empty...",
+    "string.required": "⚠ State is required...",
+    "string.base": "⚠ State must be of type string..."
+  }),
+  streetName: Joi.string().required().messages({
+    "string.empty": "⚠ Street name cannot be empty...",
+    "string.required": "⚠ Street name is required...",
+    "string.base": "⚠ Street name must be of type string..."
   })
 });
 

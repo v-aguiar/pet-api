@@ -4,7 +4,7 @@ import { prisma } from "../../src/config/db.js";
 import userUtils from "../../src/utils/userUtils.js";
 
 import { CreateUserBody } from "../../src/schemas/createUserSchema.js";
-import { CreateUserData } from "../../src/services/userServices.js";
+import { CreateUserAndLocationData } from "../../src/services/userServices.js";
 
 const userFactory = {
   generateUserBody: () => {
@@ -20,7 +20,14 @@ const userFactory = {
       lastName: faker.name.lastName(),
       imgUrl: faker.image.imageUrl(),
       phoneNumber: faker.phone.number("###########"),
-      role: faker.helpers.arrayElement(["default", "temporaryCare", "organization"])
+      role: faker.helpers.arrayElement(["default", "temporaryCare", "organization"]),
+      cep: faker.address.zipCode("########"),
+      complement: faker.address.secondaryAddress(),
+      city: faker.address.city(),
+      state: faker.address.state(),
+      district: faker.address.county(),
+      streetName: faker.address.street(),
+      isMainLocation: faker.datatype.boolean()
     };
 
     return createUserBody;
@@ -30,18 +37,42 @@ const userFactory = {
     const password = faker.internet.password();
     const hashedPassword = userUtils.hashData(password);
 
-    const createUserData: CreateUserData = {
-      password: hashedPassword,
-      email: faker.internet.email(),
-      description: faker.lorem.paragraph(),
-      firstName: faker.name.firstName(),
-      lastName: faker.name.lastName(),
-      imgUrl: faker.image.imageUrl(),
-      phoneNumber: faker.phone.number("###########"),
-      role: faker.helpers.arrayElement(["default", "temporaryCare", "organization"])
+    const createUserData: CreateUserAndLocationData = {
+      user: {
+        password: hashedPassword,
+        email: faker.internet.email(),
+        description: faker.lorem.paragraph(),
+        firstName: faker.name.firstName(),
+        lastName: faker.name.lastName(),
+        imgUrl: faker.image.imageUrl(),
+        phoneNumber: faker.phone.number("###########"),
+        role: faker.helpers.arrayElement(["default", "temporaryCare", "organization"])
+      },
+      location: {
+        cep: faker.address.zipCode("########"),
+        complement: faker.address.secondaryAddress(),
+        city: faker.address.city(),
+        state: faker.address.state(),
+        district: faker.address.county(),
+        streetName: faker.address.street(),
+        isMainLocation: faker.datatype.boolean()
+      }
     };
 
-    const createdUser = await prisma.user.create({ data: createUserData });
+    const createdUser = await prisma.user.create({
+      data: {
+        ...createUserData.user,
+        UserLocation: {
+          create: {
+            location: {
+              create: {
+                ...createUserData.location
+              }
+            }
+          }
+        }
+      }
+    });
 
     return {
       ...createdUser,

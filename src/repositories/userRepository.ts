@@ -1,10 +1,19 @@
 ﻿import { prisma } from "../config/db.js";
-import { CreateUserData } from "../services/userServices.js";
+import { CreateUserAndLocationData } from "../services/userServices.js";
 
 const userRepository = {
-  create: async (createdUserData: CreateUserData) => {
+  create: async ({ location, user }: CreateUserAndLocationData) => {
     return prisma.user.create({
-      data: createdUserData
+      data: {
+        ...user,
+        UserLocation: {
+          create: {
+            location: {
+              create: location
+            }
+          }
+        }
+      }
     });
   },
 
