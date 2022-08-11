@@ -8,9 +8,9 @@ import { SignInData } from "../schemas/signInSchema.js";
 export async function signUp(req: Request, res: Response) {
   const createUserData: CreateUserBody = req.body;
 
-  const userId = await userServices.create(createUserData);
+  await userServices.create(createUserData);
 
-  res.status(201).send({ userId });
+  res.status(201).send("✔ Created!");
 }
 
 export async function signIn(req: Request, res: Response) {

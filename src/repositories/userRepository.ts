@@ -18,11 +18,23 @@ const userRepository = {
   },
 
   findByEmail: async (email: string) => {
-    return prisma.user.findUnique({ where: { email } });
+    return prisma.userLocation.findFirst({
+      where: { user: { email } },
+      select: {
+        user: true,
+        location: true
+      }
+    });
   },
 
   findById: async (id: number) => {
-    return prisma.user.findUnique({ where: { id } });
+    return prisma.userLocation.findFirst({
+      where: { userId: id },
+      select: {
+        user: true,
+        location: true
+      }
+    });
   }
 };
 

@@ -31,8 +31,7 @@ const userServices = {
         email,
         password: hashedPassword,
         description: userData?.description,
-        firstName: userData.firstName,
-        lastName: userData.lastName,
+        name: userData.name,
         imgUrl: userData.imgUrl,
         phoneNumber: userData.phoneNumber,
         role: userData.role
@@ -48,19 +47,19 @@ const userServices = {
       }
     };
 
-    const createdUser = await userRepository.create(createUserAndLocationData);
-
-    return createdUser.id;
+    await userRepository.create(createUserAndLocationData);
   },
 
   signIn: async ({ email, password }: SignInData) => {
-    const user = await userRepository.findByEmail(email);
-    if (!user) {
+    const userAndLocation = await userRepository.findByEmail(email);
+    if (!userAndLocation) {
       throw {
         name: "notFound",
         message: "⚠ Invalid email or password..."
       };
     }
+
+    const { user } = userAndLocation;
 
     const isPasswordValid = userUtils.compareData(password, user.password);
     if (!isPasswordValid) {
@@ -71,7 +70,20 @@ const userServices = {
     }
 
     const token = userUtils.generateToken(user.id);
+
     return token;
+  },
+
+  getById: async (id: number) => {
+    const user = await userRepository.findById(id);
+    if (!user) {
+      throw {
+        name: "notFound",
+        message: "⚠ User not found..."
+      };
+    }
+
+    return user;
   }
 };
 

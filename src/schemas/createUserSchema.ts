@@ -20,15 +20,10 @@ const createUserSchema = Joi.object<CreateUserBody>({
   description: Joi.string().messages({
     "string.base": "⚠ Description must be of type string..."
   }),
-  firstName: Joi.string().required().messages({
-    "string.empty": "⚠ First name cannot be empty...",
-    "string.required": "⚠ First name is required...",
-    "string.base": "⚠ First name must be of type string..."
-  }),
-  lastName: Joi.string().required().messages({
-    "string.empty": "⚠ Last name cannot be empty...",
-    "string.required": "⚠ Last name is required...",
-    "string.base": "⚠ Last name must be of type string..."
+  name: Joi.string().required().messages({
+    "string.empty": "⚠ Name cannot be empty...",
+    "string.required": "⚠ Name is required...",
+    "string.base": "⚠ Name must be of type string..."
   }),
   imgUrl: Joi.string().uri().required().messages({
     "string.uri": "⚠ Image url is not valid...",
