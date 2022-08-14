@@ -2,8 +2,8 @@
 import express, { json } from "express";
 import cors from "cors";
 
-import router from "./routes/router.js";
 import { errorHandlerMiddleware } from "./middlewares/errorHandlerMiddleware.js";
+import router from "./routes/router.js";
 
 const server = express();
 

@@ -50,15 +50,14 @@ model Pet {
   name             String
   type             petType
   description      String?     @default("")
-  breed            String
-  age              Int
+  breed            String?     @default("SRD")
   color            String
   sex              petSex
   spayedOrNeutered Boolean
-  user             User        @relation(fields: [userId], references: [id], name: "PetUser")
-  userId           Int
-  organization     User        @relation(fields: [organizationId], references: [id], name: "PetOrganization")
-  organizationId   Int
+  user             User?       @relation(fields: [userId], references: [id], name: "PetUser")
+  userId           Int?
+  organization     User?       @relation(fields: [organizationId], references: [id], name: "PetOrganization")
+  organizationId   Int?
   status           petStatus
   PetImages        PetImages[]
 }
