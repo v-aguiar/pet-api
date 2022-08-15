@@ -11,3 +11,12 @@ export async function register(req: Request, res: Response) {
 
   res.status(201).send("✔ Pet registered!");
 }
+
+export async function findByCategory(req: Request, res: Response) {
+  const { petType: category } = req.params;
+  const { userId } = res.locals;
+  console.log(userId);
+  const pets = await petService.findByCategory({ category, userId });
+
+  res.status(200).send({ pets });
+}
