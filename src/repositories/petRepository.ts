@@ -10,7 +10,7 @@ const petRepository = {
     if (!petData.userId && !petData.organizationId) {
       throw {
         name: "badRequest",
-        message: "⚠ User or organization id is required..."
+        message: "⚠ UserID or organizationId is required..."
       };
     }
 
