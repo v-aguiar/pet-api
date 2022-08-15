@@ -81,7 +81,7 @@ enum petType {
   rabbit
   rodent
   bird
-  outro
+  other
 }
 
 enum petSex {
