@@ -24,7 +24,7 @@ const userUtils = {
   },
 
   verifyToken: (token: string) => {
-    jwt.verify(token, JWT_SECRET, async (error, data) => {
+    jwt.verify(token, JWT_SECRET, (error, data) => {
       if (error) {
         throw {
           name: "expiredToken",
