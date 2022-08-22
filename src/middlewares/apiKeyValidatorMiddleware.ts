@@ -2,9 +2,10 @@
 
 import userUtils from "../utils/userUtils.js";
 
-export function apiKeyValidator(req: Request, res: Response, next: NextFunction) {
+export async function apiKeyValidator(req: Request, res: Response, next: NextFunction) {
   const authorization = req.headers["authorization"];
   const token = authorization?.replace("Bearer ", "");
+
   if (!token || token === "") {
     throw {
       name: "unauthorized",

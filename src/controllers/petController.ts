@@ -20,3 +20,20 @@ export async function findByCategory(req: Request, res: Response) {
 
   res.status(200).send({ pets });
 }
+
+export async function findByLocation(req: Request, res: Response) {
+  const { userId } = res.locals;
+
+  const pets = await petService.findByLocation(Number(userId));
+
+  res.status(200).send(pets);
+}
+
+export async function findById(req: Request, res: Response) {
+  const { id } = req.params;
+  const { userId } = res.locals;
+
+  const pet = await petService.findById(Number(id), Number(userId));
+
+  res.status(200).send(pet);
+}

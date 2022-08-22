@@ -71,6 +71,38 @@ const petService = {
     }
 
     return pets;
+  },
+
+  findByLocation: async (userId: number) => {
+    const locationData = await locationRepository.findByUserId(userId);
+    if (!locationData || locationData.userId === userId) {
+      throw {
+        name: "notFound",
+        message: "⚠ User location not found..."
+      };
+    }
+
+    const pets = await petRepository.findByLocation({ ...locationData });
+    if (!pets || pets.length === 0) {
+      throw {
+        name: "notFound",
+        message: "⚠ No pets found on user location..."
+      };
+    }
+
+    return pets;
+  },
+
+  findById: async (id: number, userId: number) => {
+    const petData = await petRepository.findById(id, userId);
+    if (!petData) {
+      throw {
+        name: "notFound",
+        message: "⚠ Pet not found..."
+      };
+    }
+
+    return petData;
   }
 };
 

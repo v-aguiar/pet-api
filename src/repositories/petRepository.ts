@@ -3,10 +3,17 @@ import { prisma } from "../config/db.js";
 
 import { CategoryAndLocation, RegisterPetData } from "../services/petService.js";
 
+type UserIdAndLocation = {
+  userId: number;
+  location: {
+    id: number;
+    city: string;
+    state: string;
+  };
+};
+
 const petRepository = {
   create: async (petData: RegisterPetData) => {
-    console.table(petData);
-
     if (!petData.userId && !petData.organizationId) {
       throw {
         name: "badRequest",
@@ -70,6 +77,68 @@ const petRepository = {
       },
       include: {
         PetImages: true
+      }
+    });
+  },
+
+  findByLocation: async ({ userId, location }: UserIdAndLocation) => {
+    return prisma.pet.findMany({
+      where: {
+        user: {
+          UserLocation: {
+            every: {
+              location: {
+                city: {
+                  equals: location.city
+                },
+                state: {
+                  equals: location.state
+                }
+              }
+            }
+          }
+        }
+      },
+      include: {
+        PetImages: {
+          select: {
+            imageUrl: true
+          }
+        }
+      }
+    });
+  },
+
+  findById: async (id: number, userId: number) => {
+    return prisma.pet.findUnique({
+      where: {
+        id
+      },
+      include: {
+        PetImages: {
+          select: {
+            imageUrl: true
+          }
+        },
+        user: {
+          select: {
+            imgUrl: true,
+            name: true,
+            description: true,
+            email: true,
+            phoneNumber: true,
+            UserLocation: {
+              select: {
+                location: {
+                  select: {
+                    city: true,
+                    state: true
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     });
   }
