@@ -14,8 +14,11 @@ jobs:
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: "pet-api"
+          heroku_app_name: "pet-db-api"
           heroku_email: ${{secrets.HEROKU_EMAIL}}
           branch: "main"
         env:
           HD_DATABASE_URL: ${{secrets.DATABASE_URL}}
+          HD_JWT_SECRET: ${{secrets.JWT_SECRET}}
+          HD_JWT_EXPIRES_IN: ${{secrets.JWT_EXPIRES_IN}}
+          HD_SALT: ${{secrets.SALT}}
