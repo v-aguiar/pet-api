@@ -10,6 +10,7 @@ jobs:
     steps:
       - name: Check out repo code
         uses: actions/checkout@v3
+      - run: npm ci
       - name: Run production migrations
         run: npm run prisma-prod
       - name: Deploy to Heroku
