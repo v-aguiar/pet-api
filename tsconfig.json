@@ -5,7 +5,21 @@
     "moduleResolution": "Node",
     "outDir": "./dist",
     "strict": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "rootDirs": ["src"],
+    "baseUrl": "src",
+    "paths": {
+      "./*": ["./*", "./../dist/*"]
+    },
+    "plugins": [
+      {
+        "transform": "typescript-transform-paths"
+      },
+      {
+        "transform": "typescript-transform-paths",
+        "afterDeclarations": true
+      }
+    ]
   },
   "ts-node": {
     "esm": true
