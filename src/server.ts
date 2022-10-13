@@ -1,15 +1,14 @@
 ﻿import chalk from "chalk";
-import dotenv from "dotenv";
 
-import server from "./index.js";
-
-dotenv.config();
+import app, { init } from "./index.js";
 
 const PORT = process.env.PORT || 4000;
 
-server.listen(PORT, () => {
-  console.log(
-    chalk.bold.greenBright("\n🚀 Server is running!") +
-      chalk.bold.cyanBright("\n\nListening on port " + PORT + "...\n")
-  );
+init().then(() => {
+  app.listen(PORT, () => {
+    console.log(
+      chalk.bold.greenBright("\n🚀 Server is running!") +
+        chalk.bold.cyanBright("\n\nListening on port " + PORT + "...\n")
+    );
+  });
 });

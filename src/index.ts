@@ -1,17 +1,25 @@
 ﻿import "express-async-errors";
-import express, { json } from "express";
+import express, { json, Express } from "express";
 import cors from "cors";
 
+import { connectDb, disconnectDb } from "./config/db.js";
 import router from "./routes/router.js";
 
 import { errorHandlerMiddleware } from "./middlewares/errorHandlerMiddleware.js";
 
-const server = express();
+const app = express();
 
-server.use(json());
-server.use(cors());
+app.use(json()).use(cors()).use(router).use(errorHandlerMiddleware);
 
-server.use(router);
-server.use(errorHandlerMiddleware);
+export const init = (): Promise<Express> => {
+  connectDb();
+  return Promise.resolve(app);
+};
 
-export default server;
+export const close = async (): Promise<void> => {
+  await disconnectDb();
+};
+
+export default app;
+
+// TODO -> Refactor routes and project folder structure
