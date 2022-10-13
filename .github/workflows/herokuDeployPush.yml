@@ -12,7 +12,6 @@ jobs:
         uses: actions/checkout@v3
       - name: Install dependencies
         run: npm ci
-      - run: npm run db-push
       - name: Run production migrations
         run: npm run prisma-prod
         env:
